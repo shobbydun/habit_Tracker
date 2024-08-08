@@ -8,23 +8,24 @@ class MyHabitTile extends StatelessWidget {
   final void Function(BuildContext)? editHabit;
   final void Function(BuildContext)? deleteHabit;
 
-  const MyHabitTile(
-      {super.key,
-      required this.onChanged,
-      required this.isCompleted,
-      required this.text,
-      required this.editHabit,
-      required this.deleteHabit});
+  const MyHabitTile({
+    super.key,
+    required this.onChanged,
+    required this.isCompleted,
+    required this.text,
+    required this.editHabit,
+    required this.deleteHabit,
+  });
 
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 5.0, horizontal: 25),
+      padding: const EdgeInsets.symmetric(vertical: 6.0, horizontal: 25),
       child: Slidable(
         endActionPane: ActionPane(
           motion: const StretchMotion(),
           children: [
-            //edit option
+            // Edit option
             SlidableAction(
               onPressed: editHabit,
               backgroundColor: Colors.grey.shade800,
@@ -32,7 +33,7 @@ class MyHabitTile extends StatelessWidget {
               borderRadius: BorderRadius.circular(8),
             ),
 
-            //delete option
+            // Delete option
             SlidableAction(
               onPressed: deleteHabit,
               backgroundColor: Colors.red,
@@ -44,22 +45,30 @@ class MyHabitTile extends StatelessWidget {
         child: GestureDetector(
           onTap: () {
             if (onChanged != null) {
-              //toggle completion satus
+              // Toggle completion status
               onChanged!(!isCompleted);
             }
           },
 
-          //habit tile
+          // Habit tile
           child: Container(
             decoration: BoxDecoration(
               color: isCompleted
                   ? Colors.green
                   : Theme.of(context).colorScheme.secondary,
               borderRadius: BorderRadius.circular(8),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.blue.withOpacity(0.9),
+                  spreadRadius: 0,
+                  blurRadius: 8,
+                  offset: const Offset(0, 4), // Shadow position
+                ),
+              ],
             ),
             padding: const EdgeInsets.all(12),
             child: ListTile(
-              //text
+              // Text
               title: Text(
                 text,
                 style: TextStyle(
@@ -69,7 +78,7 @@ class MyHabitTile extends StatelessWidget {
                 ),
               ),
 
-              //checkbox
+              // Checkbox
               leading: Checkbox(
                 activeColor: Colors.green,
                 value: isCompleted,

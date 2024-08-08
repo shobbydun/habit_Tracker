@@ -19,14 +19,13 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     Provider.of<HabitDatabase>(context, listen: false).readHabits();
-
     super.initState();
   }
 
-  //texteditting controller
+  //text editing controller
   final TextEditingController textController = TextEditingController();
 
-  //createNewHbit function
+  //createNewHabit function
   void createNewHabit() {
     showDialog(
       context: context,
@@ -34,33 +33,35 @@ class _HomePageState extends State<HomePage> {
         content: TextField(
           controller: textController,
           decoration: InputDecoration(hintText: "Add new Habit🎉"),
+          keyboardType: TextInputType.multiline,
+          maxLines: null, // Allow multiple lines
         ),
         actions: [
-          //save buttn
+          //save button
           MaterialButton(
             onPressed: () {
-              //GET THE NEW HABIT NAME
+              // GET THE NEW HABIT NAME
               String newHabitName = textController.text;
 
-              //save to db
+              // SAVE TO DB
               context.read<HabitDatabase>().addHabit(newHabitName);
 
-              //pop box
+              // POP BOX
               Navigator.pop(context);
 
-              //clear controller
+              // CLEAR CONTROLLER
               textController.clear();
             },
             child: const Text("Save"),
           ),
 
-          //cancel btn
+          // cancel button
           MaterialButton(
             onPressed: () {
-              //pop box
+              // POP BOX
               Navigator.pop(context);
 
-              //clear controller
+              // CLEAR CONTROLLER
               textController.clear();
             },
             child: const Text("Cancel"),
@@ -70,16 +71,16 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  //check habit on off
+  // check habit on/off
   void checkHabitOnOff(bool? value, Habit habit) {
     if (value != null) {
       context.read<HabitDatabase>().updateHabitCompletion(habit.id, value);
     }
   }
 
-  //edit habit box
+  // edit habit box
   void editHabitBox(Habit habit) {
-    //set the controllers text to the habit current name
+    // set the controller's text to the habit's current name
     textController.text = habit.name;
 
     showDialog(
@@ -87,35 +88,37 @@ class _HomePageState extends State<HomePage> {
       builder: (context) => AlertDialog(
         content: TextField(
           controller: textController,
+          keyboardType: TextInputType.multiline,
+          maxLines: null, // Allow multiple lines
         ),
         actions: [
-          //save buttn
+          // save button
           MaterialButton(
             onPressed: () {
-              //GET THE NEW HABIT NAME
+              // GET THE NEW HABIT NAME
               String newHabitName = textController.text;
 
-              //update to db
+              // UPDATE TO DB
               context
                   .read<HabitDatabase>()
                   .updateHabitName(habit.id, newHabitName);
 
-              //pop box
+              // POP BOX
               Navigator.pop(context);
 
-              //clear controller
+              // CLEAR CONTROLLER
               textController.clear();
             },
             child: const Text("Save"),
           ),
 
-          //cancel btn
+          // cancel button
           MaterialButton(
             onPressed: () {
-              //pop box
+              // POP BOX
               Navigator.pop(context);
 
-              //clear controller
+              // CLEAR CONTROLLER
               textController.clear();
             },
             child: const Text("Cancel"),
@@ -125,29 +128,29 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  //delete habit box
+  // delete habit box
   void deleteHabitBox(Habit habit) {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
         title: const Text("Are you sure you want to delete?❌"),
         actions: [
-          //delete buttn
+          // delete button
           MaterialButton(
             onPressed: () {
-              //delete from db
+              // DELETE FROM DB
               context.read<HabitDatabase>().deleteHabit(habit.id);
 
-              //pop box
+              // POP BOX
               Navigator.pop(context);
             },
             child: const Text("Delete"),
           ),
 
-          //cancel btn
+          // cancel button
           MaterialButton(
             onPressed: () {
-              //pop box
+              // POP BOX
               Navigator.pop(context);
             },
             child: const Text("Cancel"),
@@ -170,75 +173,74 @@ class _HomePageState extends State<HomePage> {
       floatingActionButton: FloatingActionButton(
         onPressed: createNewHabit,
         elevation: 0,
-        backgroundColor: Theme.of(context).colorScheme.tertiary,
+        backgroundColor: const Color.fromARGB(255, 158, 213, 239),
         child: const Icon(
           Icons.add,
-        color: Colors.black,
+          color: Colors.black,
         ),
       ),
       body: ListView(
         children: [
-          //heat Map
+          // heat map
           _buildHeatMap(),
 
-          //habit list
-          _buiildHabitList()
+          // habit list
+          _buildHabitList(),
         ],
       ),
     );
   }
 
-  //build _buildHeatMap
-  Widget _buildHeatMap(){
-    //habit databse
-    final habitDatabse = context.watch<HabitDatabase>();
+  // build _buildHeatMap
+  Widget _buildHeatMap() {
+    // habit database
+    final habitDatabase = context.watch<HabitDatabase>();
 
-    //current habits
-    List<Habit> currentHabits = habitDatabse.currentHabits;
+    // current habits
+    List<Habit> currentHabits = habitDatabase.currentHabits;
 
-    //return heat map UI
-    return FutureBuilder(future: habitDatabse.getFirstLaunchDte(), 
-    builder: (context, snapshot){
-      //once the data is available -> build heatmap
-      if(snapshot.hasData){
-        return MyHeatMap(
-          startDate: snapshot.data!,
-          datasets: prepHeatMapDataset(currentHabits),
-        );
-      }
-
-      //handle case
-      else{
-        return Container();
-      }
-    },
+    // return heat map UI
+    return FutureBuilder(
+      future: habitDatabase.getFirstLaunchDte(),
+      builder: (context, snapshot) {
+        // once the data is available -> build heatmap
+        if (snapshot.hasData) {
+          return MyHeatMap(
+            startDate: snapshot.data!,
+            datasets: prepHeatMapDataset(currentHabits),
+          );
+        } else {
+          // handle case
+          return Container();
+        }
+      },
     );
   }
 
-  //buld habit list
-  Widget _buiildHabitList() {
-    //habit db
+  // build habit list
+  Widget _buildHabitList() {
+    // habit database
     final habitDatabase = context.watch<HabitDatabase>();
 
-    //current habits
+    // current habits
     List<Habit> currentHabits = habitDatabase.currentHabits;
 
-    //return lists of habits UI
+    // return list of habits UI
     return ListView.builder(
       itemCount: currentHabits.length,
       shrinkWrap: true,
       physics: const NeverScrollableScrollPhysics(),
       itemBuilder: (context, index) {
-        //get each individual habit
+        // get each individual habit
         final habit = currentHabits[index];
 
-        //check if habit is completd today
-        bool isCompletetedToday = isHabitCompletedToday(habit.completedDays);
+        // check if habit is completed today
+        bool isCompletedToday = isHabitCompletedToday(habit.completedDays);
 
-        //return habit tile UI
+        // return habit tile UI
         return MyHabitTile(
           text: habit.name,
-          isCompleted: isCompletetedToday,
+          isCompleted: isCompletedToday,
           onChanged: (value) => checkHabitOnOff(value, habit),
           editHabit: (context) => editHabitBox(habit),
           deleteHabit: (context) => deleteHabitBox(habit),
