@@ -23,9 +23,9 @@ To download and install the APK from GitHub using Visual Studio, first clone the
 
 # Screenshots
 
-
-![5884448849194500181](https://github.com/user-attachments/assets/1a89caf0-e1c5-4f29-95b0-f5365b1f93ae)
-![5884448849194500179](https://github.com/user-attachments/assets/ea3aa19a-b247-4fa9-979b-dc88515a3e9a)
 ![5884448849194500180](https://github.com/user-attachments/assets/476d463f-6fc5-40d0-8834-2886cb92370f)
+![5884448849194500181](https://github.com/user-attachments/assets/1a89caf0-e1c5-4f29-95b0-f5365b1f93ae)
 ![5884448849194500178](https://github.com/user-attachments/assets/3d56ee63-3068-4b71-84cb-a301107683b1)
 ![5884448849194500177](https://github.com/user-attachments/assets/ba626114-18ec-4905-9c3d-b6fe2e92d29d)
+![5884448849194500179](https://github.com/user-attachments/assets/ea3aa19a-b247-4fa9-979b-dc88515a3e9a)
+
